@@ -27,7 +27,7 @@ Generate 5 Files And Verify
 *** Keywords ***
 Get File Count Recursive
     [Arguments]    ${path}
-    ${count}=    Run Process    find    ${path}    -type    f    -name    *.txt    stdout=PIPE
+    ${count}=    Run Process    find    ${path}    -type    f    -name    *.txt    stdout=file_list.txt
     # Count lines in stdout
     ${lines}=    Get Line Count    ${count.stdout}
     RETURN    ${lines}
@@ -35,7 +35,7 @@ Get File Count Recursive
 Verify Files Content Uniqueness
     [Arguments]    ${path}
     # Get all file paths
-    ${find_result}=    Run Process    find    ${path}    -type    f    -name    *.txt    stdout=PIPE
+    ${find_result}=    Run Process    find    ${path}    -type    f    -name    *.txt    stdout=file_list.txt
     @{file_paths}=    Split String    ${find_result.stdout}
     
     ${contents}=    Create List
@@ -47,8 +47,6 @@ Verify Files Content Uniqueness
     END
     
     ${count}=    Get Length    ${contents}
-    # Convert list to set (remove duplicates) - Robot doesn't have direct Set conversion in built-in
-    # Use Remove Duplicates from Collections library
     ${unique_contents}=    Copy List    ${contents}
     Remove Duplicates    ${unique_contents}
     ${unique_count}=    Get Length    ${unique_contents}

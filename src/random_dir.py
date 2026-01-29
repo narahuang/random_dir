@@ -1,17 +1,19 @@
 import os
 import random
-import string
+import textwrap
+import shutil
 from lorem_text import lorem
 
+
 def inject_symbols(text):
-    """
-    Randomly injects numbers and symbols into the text between characters.
-    """
+    # Randomly injects numbers and symbols into the text between characters.
     chars = list(text)
-    symbols_numbers = string.digits + string.punctuation
+    symbols_numbers = ["0","1","2","3","4","5","6","7","8","9","!","@",
+    "#","$","%","^","&","*","(",")","-","_","+","=","[","]","{","}",
+    "|","\\","<",">",",",".","/","?","`","~"]
     
-    # Decide on a random number of insertions, e.g., 10% to 30% of text length
-    num_insertions = random.randint(len(text) // 10, len(text) // 3)
+    # Random 0% to 25% of length of text insertions.
+    num_insertions = random.randint(0, len(chars) // 4)
     
     for _ in range(num_insertions):
         position = random.randint(0, len(chars))
@@ -21,29 +23,19 @@ def inject_symbols(text):
     return "".join(chars)
 
 def generate_random_content():
-    """
-    Generates random content using lorem-text (1-1000 words)
-    and injects symbols/numbers.
-    """
+    # Generates random content using lorem-text (1-1000 words)
+    # then injects symbols/numbers.
     num_words = random.randint(1, 1000)
     raw_text = lorem.words(num_words)
     return inject_symbols(raw_text)
 
 def generate_random_name():
-    """
-    Generates a random filename/dirname using lorem-text (1-3 words).
-    Removes spaces to make it filesystem friendly, though not strictly required.
-    """
-    # Using 1 word is usually safer for directory names to avoid too long paths, 
-    # but requirement implies "random name", lorem usually gives words.
-    return lorem.words(1).replace(" ", "_").lower()
+    # Generates a random filename/dirname using lorem-text (1 word).
+    return lorem.words(1).replace(" ", "").lower()
 
 def create_files(n, output_dir="output"):
-    """
-    Generates n files with random content in random directories (0-3 levels deep).
-    """
+    # Generates n files with random content in random directories (0-3 levels deep).
     if os.path.exists(output_dir):
-        import shutil
         shutil.rmtree(output_dir)
     os.makedirs(output_dir)
 
@@ -66,9 +58,11 @@ def create_files(n, output_dir="output"):
         
         # Generate content
         content = generate_random_content()
+        wrapped_text = textwrap.fill(content, width=80)
         
         # Write to file
         with open(file_path, "w", encoding="utf-8") as f:
-            f.write(content)
+            f.write(wrapped_text)
+        print(f"{file_path}")
 
     print(f"Generated {n} files in '{output_dir}'.")
