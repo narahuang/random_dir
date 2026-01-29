@@ -8,6 +8,7 @@ def main():
     
     args = parser.parse_args()
     
+    # Use try-except to catch any errors during file operations.
     try:
         random_dir.create_files(args.n)
     except Exception as e:
