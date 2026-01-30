@@ -12,7 +12,7 @@ def search_files(keyword, search_dir="output"):
             if not file.endswith(".txt"):
                 continue
                 
-            file_path = os.path.join(root, file)
+            file_path = os.path.abspath(os.path.join(root, file))
             try:
                 with open(file_path, 'r', encoding='utf-8') as f:
                     content = f.read()
