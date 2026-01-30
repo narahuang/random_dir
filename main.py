@@ -6,6 +6,7 @@ def main():
     parser = argparse.ArgumentParser(description="Generate random directories and files.")
     parser.add_argument("-n", type=int, help="Number of files to generate")
     parser.add_argument("-s", type=str, help="Search keyword")
+    parser.add_argument("-d", "--dir", type=str, default="output", help="Target directory (default: output)")
     
     args = parser.parse_args()
     
@@ -13,14 +14,13 @@ def main():
         parser.print_help()
         sys.exit(1)
     
-    # Use try-except to catch any errors during file operations.
     try:
         if args.n:
-            random_dir.create_files(args.n)
+            random_dir.create_files(args.n, output_dir=args.dir)
         
         if args.s:
             from src import search
-            search.search_files(args.s)
+            search.search_files(args.s, search_dir=args.dir)
             
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)

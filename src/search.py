@@ -55,8 +55,17 @@ def search_files(keyword, search_dir="output"):
 
     # Table headers
     print(f"{'Date and Time':<25} | {'Title':<40} | {'Path'}")
-    print("-" * 25 + "+" + "-" * 42 + "+" + "-" * 30)
+    print("-" * 26 + "+" + "-" * 42 + "+" + "-" * 30)
     
     for res in results:
         title_display = (res['title'][:37] + '...') if len(res['title']) > 40 else res['title']
         print(f"{res['date_time']:<25} | {title_display:<40} | {res['path']}")
+
+
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description="Search for a keyword in generated files.")
+    parser.add_argument("-s", "--search", type=str, required=True, help="Keyword to search for")
+    parser.add_argument("-d", "--dir", type=str, default="output", help="Directory to search in (default: output)")
+    args = parser.parse_args()
+    search_files(args.search, search_dir=args.dir)

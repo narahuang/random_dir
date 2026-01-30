@@ -31,17 +31,14 @@ def generate_random_content():
     return inject_symbols(raw_text)
 
 def generate_random_title():
-    # Title: random words (0-10 words) from lorem
-    num_words = random.randint(0, 10)
-    if num_words == 0:
-        return "Untitled"
+    num_words = random.randint(1, 10)
     return lorem.words(num_words).title()
 
 def generate_random_datetime():
     # Date and time: randomly generate date and time
-    # within the last 10 years
+    # within the last 100 years
     end_time = datetime.datetime.now()
-    start_time = end_time - datetime.timedelta(days=365*10)
+    start_time = end_time - datetime.timedelta(days=365*100)
     random_seconds = random.randint(0, int((end_time - start_time).total_seconds()))
     random_date = start_time + datetime.timedelta(seconds=random_seconds)
     return random_date.strftime("%Y-%m-%d %H:%M:%S")
@@ -100,3 +97,12 @@ def create_files(n, output_dir="output"):
         print(f"{file_path}")
 
     print(f"Generated {n} files in '{output_dir}'.")
+
+
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description="Generate random directories and files.")
+    parser.add_argument("-n", type=int, required=True, help="Number of files to generate")
+    parser.add_argument("-d", "--dir", type=str, default="output", help="Target directory (default: output)")
+    args = parser.parse_args()
+    create_files(args.n, output_dir=args.dir)
