@@ -1,6 +1,7 @@
 import argparse
 import sys
 from src import random_dir
+from src import search
 
 def main():
     parser = argparse.ArgumentParser(description="Generate random directories and files.")
@@ -19,7 +20,6 @@ def main():
             random_dir.create_files(args.n, output_dir=args.dir)
         
         if args.s:
-            from src import search
             search.search_files(args.s, search_dir=args.dir)
             
     except Exception as e:
