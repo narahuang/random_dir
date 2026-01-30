@@ -1,18 +1,12 @@
 import os
 
 def search_files(keyword, search_dir="output"):
-    """
-    Searches for a keyword in files within the search_dir.
-    Prints a table of matching files with Date and Time, Title, and Path.
-    Case-insensitive search.
-    """
     if not os.path.exists(search_dir):
         print(f"Directory '{search_dir}' not found.")
         return
 
     results = []
     
-    # Walk through directory
     for root, dirs, files in os.walk(search_dir):
         for file in files:
             if not file.endswith(".txt"):
@@ -25,7 +19,6 @@ def search_files(keyword, search_dir="output"):
                     
                 # Case-insensitive check
                 if keyword.lower() in content.lower():
-                    # Extract metadata
                     lines = content.split('\n')
                     title = "N/A"
                     date_time = "N/A"
@@ -36,7 +29,6 @@ def search_files(keyword, search_dir="output"):
                         elif line.startswith("Date and time: "):
                             date_time = line[len("Date and time: "):].strip()
                         
-                        # Stop reading if we have both
                         if title != "N/A" and date_time != "N/A":
                             break
                             
@@ -53,7 +45,6 @@ def search_files(keyword, search_dir="output"):
         print(f"No files found containing keyword '{keyword}'.")
         return
 
-    # Table headers
     print(f"{'Date and Time':<25} | {'Title':<40} | {'Path'}")
     print("-" * 26 + "+" + "-" * 42 + "+" + "-" * 30)
     
@@ -64,8 +55,8 @@ def search_files(keyword, search_dir="output"):
 
 if __name__ == "__main__":
     import argparse
-    parser = argparse.ArgumentParser(description="Search for a keyword in generated files.")
-    parser.add_argument("-s", "--search", type=str, required=True, help="Keyword to search for")
+    parser = argparse.ArgumentParser(description="Search for a keyword in directory.")
+    parser.add_argument("-s", "--search", type=str, required=True, help="Search keyword")
     parser.add_argument("-d", "--dir", type=str, default="output", help="Directory to search in (default: output)")
     args = parser.parse_args()
     search_files(args.search, search_dir=args.dir)
